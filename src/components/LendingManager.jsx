@@ -1,47 +1,34 @@
-import React, { useState, useEffect } from "react"
-import { Box, Button, makeStyles } from "@material-ui/core"
-import { useEthers, useNotifications, useCall } from "@usedapp/core"
-import { Contract } from '@ethersproject/contracts'
-import { utils } from 'ethers'
-import CLendingManager from "./json/CLendingManager.json"
-import ContractAddresses from "./json/map.json"
+import React from "react";
+import { useCall } from "@usedapp/core";
+import { utils } from "ethers";
+import { Card } from "react-bootstrap";
 
+export const LendingManager = ({
+  CLendingManagerAddress,
+  CLendingManagerContract,
+}) => {
+  const { value } =
+    useCall(
+      CLendingManagerAddress && {
+        contract: CLendingManagerContract,
+        method: "getDepositBalance",
+        args: [],
+      }
+    ) ?? {};
 
-export const LendingManager = () => {
-
-    const [balance, setBalance] = useState(0)
-    const { notifications } = useNotifications()
-
-    const { chainId } = useEthers()
-    console.log("chain: ", chainId)
-
-    const { abi } = CLendingManager
-    const CLendingManagerInterface = new utils.Interface(abi)
- 
-    const CLendingManagerAddress = chainId ? ContractAddresses[chainId]["CLendingManager"][0] : undefined
-
-    console.log("address: ", CLendingManagerAddress)
-
-
-    const { value, error } = 
-        useCall(new Contract(CLendingManagerAddress, CLendingManagerInterface),
-            'totalSupply',
-            []
-        )
-        
-    const onClickHandler = event => {
-        console.log("balance: ", utils.formatEther(value))
-    };
-    
-    return (
-        <Box>
-            <h1> Lending Manager </h1>
-            <Box>
-                Balance
-                <Button onClick={onClickHandler}>Update</Button>
-
-            </Box>
-            
-        </Box >)
-
-}
+  return (
+    <div>
+      <Card style={{ width: "18rem" }}>
+        <Card.Body>
+          <Card.Title>Lending Manager</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">
+            Card Subtitle
+          </Card.Subtitle>
+          <Card.Text>
+            {value === undefined ? "undefined" : utils.formatEther(value?.[0])}
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+};

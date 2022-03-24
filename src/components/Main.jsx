@@ -1,34 +1,44 @@
 /* eslint-disable spaced-comment */
 /// <reference types="react-scripts" />
+import React, { useState } from "react";
 import { useEthers } from "@usedapp/core";
-import { makeStyles } from "@material-ui/core";
 import { Wallet } from "./wallet/Wallet";
+import { Conversion } from "./Conversion";
 import { Deposit } from "./Deposit";
 import { Borrow } from "./Borrow";
 import { LendingManager } from "./LendingManager";
-import ErrorBoundary from "./ErrorBoundary";
 import { Contract } from "@ethersproject/contracts";
 import ContractAddresses from "./json/map.json";
 import CLendingManager from "./json/CLendingManager.json";
 import { utils } from "ethers";
-
-const useStyles = makeStyles((theme) => ({
-  title: {
-    color: theme.palette.common.black,
-    textAlign: "center",
-    padding: theme.spacing(4),
-  },
-}));
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Container, Row, Col } from "react-bootstrap";
+import networks from "./json/networks.json";
 
 export const Main = () => {
-  const classes = useStyles();
-  const { chainId } = useEthers();
+  let { chainId } = useEthers();
   const { account } = useEthers();
+
+  const [eth, setETH] = useState(0);
+  const [dai, setDAI] = useState(0);
+
+  const [tokens, setToken] = useState({ Token: "na", USD: 0, CHF: 0 });
+
+  const notify = (message) => toast.success(message);
 
   if (chainId === undefined) return <div>Please connect</div>;
 
+  if (chainId === 1337) {
+    chainId = 5777;
+  }
+
+  if (ContractAddresses[chainId] === undefined) {
+    return <div>Invalid Network: {networks[chainId]}</div>;
+  }
+
   const CLendingManagerAddress = chainId
-    ? ContractAddresses[chainId === 1337 ? 5777 : chainId]["CLendingManager"][0]
+    ? ContractAddresses[chainId]["CLendingManager"][0]
     : undefined;
 
   const { abi } = CLendingManager;
@@ -38,16 +48,39 @@ export const Main = () => {
     CLendingManagerInterface
   );
 
-  console.log("Chain ID: ", chainId);
-  console.log("Address: ", CLendingManagerAddress);
-
   return (
-    <>
-      <h2 className={classes.title}>Crypto Lending</h2>
-      <Wallet account={account} />
-      <Deposit CLendingManagerContract={CLendingManagerContract} />
-      <Borrow />
-      {/* <LendingManager/> */}
-    </>
+    <Container fluid>
+      <Row className="p-2">
+        <Col>
+          <Wallet network={networks[chainId]} account={account} />
+        </Col>
+        <Col>
+          <Conversion eth={eth} setETH={setETH} dai={dai} setDAI={setDAI} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Deposit
+            CLendingManagerContract={CLendingManagerContract}
+            notify={notify}
+            ethusd={eth}
+          />
+        </Col>
+        <Col>
+          <Borrow />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <LendingManager
+            CLendingManagerAddress={CLendingManagerAddress}
+            CLendingManagerContract={CLendingManagerContract}
+          />
+        </Col>
+      </Row>
+      <div>
+        <ToastContainer />
+      </div>
+    </Container>
   );
 };

@@ -1,39 +1,55 @@
-import { Button, makeStyles } from "@material-ui/core"
-import { useEthers } from "@usedapp/core"
-import { utils } from 'ethers'
-
-
-const useStyles = makeStyles((theme) => ({
-    container: {
-        padding: theme.spacing(4),
-        display: "flex",
-        justifyContent: "flex-end",
-        gap: theme.spacing(1)
-    },
-}))
-
+import {
+  Button,
+  Navbar,
+  Nav,
+  NavDropdown,
+  Form,
+  FormControl,
+  Container,
+  Offcanvas,
+} from "react-bootstrap";
+import { useEthers } from "@usedapp/core";
 
 export const Header = () => {
-    const classes = useStyles()
-    const { account, activateBrowserWallet, deactivate } = useEthers()
-    const isConnected = account !== undefined
+  const { account, activateBrowserWallet, deactivate } = useEthers();
+  const isConnected = account !== undefined;
 
-    return (
-        <div className={classes.container}>
+  return (
+    <Navbar bg="light" expand="lg">
+      <Container fluid>
+        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Collapse id="navbarScroll">
+          <Nav
+            className="me-auto my-2 my-lg-0"
+            style={{ maxHeight: "100px" }}
+            navbarScroll
+          ></Nav>
+          <Form className="d-flex">
+            <FormControl
+              type="search"
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+            />
             {isConnected ? (
-                <Button variant="contained" onClick={deactivate}>
-                    Disconnect
-                </Button>
+              <Button variant="outline-secondary" onClick={deactivate}>
+                Disconnect
+              </Button>
             ) : (
-                <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={() => activateBrowserWallet()}
-                >
-                    Connect
-                </Button>
+              <Button
+                variant="outline-primary"
+                onClick={() => activateBrowserWallet()}
+              >
+                Connect
+              </Button>
             )}
-        </div>
-    )
-}
+          </Form>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
+};
 
+/*
+ */

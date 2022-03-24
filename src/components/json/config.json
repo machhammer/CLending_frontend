@@ -1,0 +1,22 @@
+{
+  "Tokens": {
+    "ETH": [
+      "eth.png",
+      "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=CHF,USD",
+      "ETH",
+      null
+    ],
+    "DAI": [
+      "dai.png",
+      "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=CHF,USD",
+      "ETH",
+      null
+    ],
+    "SHIB": [
+      "shib.png",
+      "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=CHF,USD",
+      "ETH",
+      null
+    ]
+  }
+}
