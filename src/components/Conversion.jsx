@@ -13,12 +13,11 @@ export const Conversion = ({ eth, setETH, dai, setDAI }) => {
       setDAI(response);
     });
   }
-
   useEffect(() => {
     callPriceFeeds();
     const interval = setInterval(() => {
       callPriceFeeds();
-    }, 5000);
+    }, 300000);
     return () => {
       clearInterval(interval);
       setETH(0);
