@@ -7,14 +7,27 @@ export const LendingManager = ({
   CLendingManagerAddress,
   CLendingManagerContract,
 }) => {
-  const { value } =
+  const { value: keys } =
     useCall(
       CLendingManagerAddress && {
         contract: CLendingManagerContract,
-        method: "getDepositBalance",
+        method: "getDepositKeys",
         args: [],
       }
     ) ?? {};
+
+  const { value: keys } =
+    useCall(
+      CLendingManagerAddress && {
+        contract: CLendingManagerContract,
+        method: "getDepositKeys",
+        args: [],
+      }
+    ) ?? {};
+
+  const list_items = (keys !== undefined ? keys[0] : []).map((key) => (
+    <li key="{key}">{key}</li>
+  ));
 
   return (
     <div>
@@ -24,9 +37,7 @@ export const LendingManager = ({
           <Card.Subtitle className="mb-2 text-muted">
             Card Subtitle
           </Card.Subtitle>
-          <Card.Text>
-            {value === undefined ? "undefined" : utils.formatEther(value?.[0])}
-          </Card.Text>
+          <Card.Text>{list_items}</Card.Text>
         </Card.Body>
       </Card>
     </div>
