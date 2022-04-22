@@ -62,8 +62,9 @@ export const Main = () => {
         <Col>
           <Deposit
             CLendingManagerContract={CLendingManagerContract}
+            account={account}
             notify={notify}
-            ethusd={eth}
+            eth={eth}
           />
         </Col>
         <Col>
@@ -71,7 +72,7 @@ export const Main = () => {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col sm={12}>
           <LendingManager
             CLendingManagerAddress={CLendingManagerAddress}
             CLendingManagerContract={CLendingManagerContract}

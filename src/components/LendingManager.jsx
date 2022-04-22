@@ -1,7 +1,7 @@
 import React from "react";
 import { useCall } from "@usedapp/core";
+import { Table } from "react-bootstrap";
 import { utils } from "ethers";
-import { Card } from "react-bootstrap";
 
 export const LendingManager = ({
   CLendingManagerAddress,
@@ -16,30 +16,41 @@ export const LendingManager = ({
       }
     ) ?? {};
 
-  const { value: keys } =
+  const { value: deposits } =
     useCall(
       CLendingManagerAddress && {
         contract: CLendingManagerContract,
-        method: "getDepositKeys",
+        method: "getAllDeposits",
         args: [],
       }
     ) ?? {};
 
-  const list_items = (keys !== undefined ? keys[0] : []).map((key) => (
-    <li key="{key}">{key}</li>
-  ));
-
   return (
-    <div>
-      <Card style={{ width: "18rem" }}>
-        <Card.Body>
-          <Card.Title>Lending Manager</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">
-            Card Subtitle
-          </Card.Subtitle>
-          <Card.Text>{list_items}</Card.Text>
-        </Card.Body>
-      </Card>
+    <div className="p-2 d-flex justify-content-between border rounded-2">
+      <Table borderless>
+        <thead>
+          <tr>
+            <th>Depositor</th>
+            <th>Amount</th>
+            <th>Timestamp</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          {(keys !== undefined ? deposits[0] : []).map((deposit) => (
+            <tr key={deposit.key}>
+              <td>{deposit.depositor}</td>
+              <td>{utils.formatEther(deposit.amount.toString())} ETH</td>
+              <td>
+                {new Date(
+                  deposit.timestamp.toString() * 1000
+                ).toLocaleDateString("de-DE")}
+              </td>
+              <td>{deposit.duration_in_month.toString()} months</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   );
 };

@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useContractFunction, useNotifications } from "@usedapp/core";
 import { utils } from "ethers";
-import { Form, Button, Card } from "react-bootstrap";
-// import { Calendar } from "react-bootstrap-calendar";
+import { Form, Button, Card, Row, Col } from "react-bootstrap";
 
-export const Deposit = ({
-  CLendingManagerContract,
-  notify,
-  ethusd,
-  ethchf,
-}) => {
+export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
   const [deposit, setDeposit] = useState(0);
   const [processing, setProcessing] = useState(false);
 
@@ -17,19 +11,33 @@ export const Deposit = ({
 
   const { notifications } = useNotifications();
 
+  const _now = new Date();
+
   const { send: stakeSend } = useContractFunction(
     CLendingManagerContract,
-    "depositAmount",
+    "addDeposit",
     {
       transactionName: "Deposit Amount",
     }
   );
+
   const onChangeHandler = (event) => {
     setDeposit(event.target.value);
-    setValueInUSD(event.target.value * ethusd);
+    setValueInUSD(event.target.value * eth["USD"]);
   };
+
+  const onDateChangeHandler = (event) => {
+    const _date = new Date(event.target.value);
+    console.log("Date: ", _date);
+    const _diff = parseInt((_date - _now) / (1000 * 60 * 60 * 24), 10);
+    console.log("Diff: ", _diff);
+  };
+
   const onClickHandler = (event) => {
-    stakeSend({ value: utils.parseEther(deposit) });
+    stakeSend(55, {
+      from: account,
+      value: utils.parseEther(deposit),
+    });
     setProcessing(true);
   };
 
@@ -54,24 +62,34 @@ export const Deposit = ({
           <Card.Subtitle className="mb-2 text-muted">Amount</Card.Subtitle>
           <Card.Text as="div">
             <Form>
-              <Form.Group className="mb-3" controlId="amount_to_deposit">
-                <Form.Control
-                  type="number"
-                  name="deposit"
-                  onChange={onChangeHandler}
-                />
-                <span>{valueInUSD}</span>
-              </Form.Group>
-              {processing ? (
-                <div className="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              ) : (
-                <Button variant="outline-primary" onClick={onClickHandler}>
-                  Stake
-                </Button>
-              )}{" "}
-              {/* <Calendar /> */}
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="amount_to_deposit">
+                  <Form.Control
+                    type="number"
+                    name="deposit"
+                    onChange={onChangeHandler}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} controlId="deposit_timeframe">
+                  <Form.Control
+                    type="date"
+                    name="dob"
+                    placeholder="Date of Birth"
+                    onChange={onDateChangeHandler}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} controlId="amount_to_deposit">
+                  {processing ? (
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  ) : (
+                    <Button variant="outline-primary" onClick={onClickHandler}>
+                      Deposit
+                    </Button>
+                  )}{" "}
+                </Form.Group>
+              </Row>
             </Form>
           </Card.Text>
         </Card.Body>

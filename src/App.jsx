@@ -7,7 +7,7 @@ function App() {
     <DAppProvider
       config={{
         notifications: {
-          expirationPeriod: 5000,
+          expirationPeriod: 20000,
           checkInterval: 1000,
         },
       }}
