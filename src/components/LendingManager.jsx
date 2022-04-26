@@ -46,7 +46,7 @@ export const LendingManager = ({
                   deposit.timestamp.toString() * 1000
                 ).toLocaleDateString("de-DE")}
               </td>
-              <td>{deposit.duration_in_month.toString()} months</td>
+              <td>{deposit.duration_in_month.toString()} days</td>
             </tr>
           ))}
         </tbody>

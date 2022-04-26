@@ -5,6 +5,8 @@ import { Form, Button, Card, Row, Col } from "react-bootstrap";
 
 export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
   const [deposit, setDeposit] = useState(0);
+  const [maturity, setMaturity] = useState(0);
+
   const [processing, setProcessing] = useState(false);
 
   const [valueInUSD, setValueInUSD] = useState(0);
@@ -31,10 +33,11 @@ export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
     console.log("Date: ", _date);
     const _diff = parseInt((_date - _now) / (1000 * 60 * 60 * 24), 10);
     console.log("Diff: ", _diff);
+    setMaturity(_diff);
   };
 
   const onClickHandler = (event) => {
-    stakeSend(55, {
+    stakeSend(maturity, {
       from: account,
       value: utils.parseEther(deposit),
     });
@@ -70,11 +73,11 @@ export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
                     onChange={onChangeHandler}
                   />
                 </Form.Group>
-                <Form.Group as={Col} controlId="deposit_timeframe">
+                <Form.Group as={Col} controlId="deposit_maturity">
                   <Form.Control
                     type="date"
-                    name="dob"
-                    placeholder="Date of Birth"
+                    name="maturity"
+                    placeholder="Maturity"
                     onChange={onDateChangeHandler}
                   />
                 </Form.Group>
