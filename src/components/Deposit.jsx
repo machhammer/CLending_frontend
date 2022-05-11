@@ -6,13 +6,9 @@ import { Form, Button, Card, Row, Col } from "react-bootstrap";
 export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
   const [deposit, setDeposit] = useState(0);
   const [maturity, setMaturity] = useState(0);
-
   const [processing, setProcessing] = useState(false);
-
   const [valueInUSD, setValueInUSD] = useState(0);
-
   const { notifications } = useNotifications();
-
   const _now = new Date();
 
   const { send: stakeSend } = useContractFunction(

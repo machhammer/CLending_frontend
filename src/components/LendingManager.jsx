@@ -25,6 +25,12 @@ export const LendingManager = ({
       }
     ) ?? {};
 
+  function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
   return (
     <div className="p-2 d-flex justify-content-between border rounded-2">
       <Table borderless>
@@ -32,8 +38,10 @@ export const LendingManager = ({
           <tr>
             <th>Depositor</th>
             <th>Amount</th>
-            <th>Timestamp</th>
-            <th>Duration</th>
+            <th>Created</th>
+            <th>Maturity</th>
+            <th>Expires</th>
+            <th>Expired</th>
           </tr>
         </thead>
         <tbody>
@@ -44,9 +52,26 @@ export const LendingManager = ({
               <td>
                 {new Date(
                   deposit.timestamp.toString() * 1000
-                ).toLocaleDateString("de-DE")}
+                ).toLocaleDateString("de-DE", {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
               </td>
-              <td>{deposit.duration_in_month.toString()} days</td>
+              <td>{deposit.duration_in_days.toString()} days</td>
+              <td>
+                {addDays(
+                  new Date(deposit.timestamp.toString() * 1000),
+                  deposit.duration_in_days.toNumber()
+                ).toLocaleDateString("de-DE", {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </td>
+              <td>{deposit.isValid.toString()}</td>
             </tr>
           ))}
         </tbody>
