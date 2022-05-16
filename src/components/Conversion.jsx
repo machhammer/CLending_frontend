@@ -43,13 +43,14 @@ export const Conversion = ({ eth, setETH, dai, setDAI }) => {
             <td>{eth["USD"]} </td>
             <td>{eth["CHF"]}</td>
           </tr>
-          <tr>
+          {/*         <tr>
             <td>
               <img src={dai_logo} width="30" />
             </td>
             <td>{dai["USD"]} </td>
             <td>{dai["CHF"]}</td>
           </tr>
+   */}{" "}
         </tbody>
       </Table>
     </div>
