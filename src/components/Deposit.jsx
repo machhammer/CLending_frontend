@@ -58,7 +58,6 @@ export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
       <Card>
         <Card.Body>
           <Card.Title>Deposit</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">Amount</Card.Subtitle>
           <Card.Text as="div">
             <Form>
               <Row className="mb-3">
