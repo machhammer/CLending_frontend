@@ -1,6 +1,7 @@
 /* eslint-disable spaced-comment */
 /// <reference types="react-scripts" />
 import React, { useState } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import { useEthers } from "@usedapp/core";
 import { Wallet } from "./wallet/Wallet";
 import { Conversion } from "./Conversion";
@@ -60,23 +61,28 @@ export const Main = () => {
       </Row>
       <Row>
         <Col>
-          <Deposit
-            CLendingManagerContract={CLendingManagerContract}
-            account={account}
-            notify={notify}
-            eth={eth}
-          />
-        </Col>
-        <Col>
-          <Borrow />
-        </Col>
-      </Row>
-      <Row>
-        <Col sm={12}>
-          <LendingManager
-            CLendingManagerAddress={CLendingManagerAddress}
-            CLendingManagerContract={CLendingManagerContract}
-          />
+          <Routes>
+            <Route
+              path="/client"
+              element={
+                <Deposit
+                  CLendingManagerContract={CLendingManagerContract}
+                  account={account}
+                  notify={notify}
+                  eth={eth}
+                />
+              }
+            />
+            <Route
+              path="/manager"
+              element={
+                <LendingManager
+                  CLendingManagerAddress={CLendingManagerAddress}
+                  CLendingManagerContract={CLendingManagerContract}
+                />
+              }
+            />
+          </Routes>
         </Col>
       </Row>
       <div>
