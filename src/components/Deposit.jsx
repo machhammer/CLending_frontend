@@ -41,6 +41,7 @@ export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
   };
 
   useEffect(() => {
+    console.log(notifications);
     if (
       notifications.filter(
         (notification) =>
