@@ -6,7 +6,6 @@ import { useEthers } from "@usedapp/core";
 import { Wallet } from "./wallet/Wallet";
 import { Conversion } from "./Conversion";
 import { Deposit } from "./Deposit";
-import { Borrow } from "./Borrow";
 import { LendingManager } from "./LendingManager";
 import { Contract } from "@ethersproject/contracts";
 import ContractAddresses from "./json/map.json";
@@ -15,7 +14,7 @@ import { utils } from "ethers";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container, Row, Col } from "react-bootstrap";
-import networks from "./json/networks.json";
+import networks from "./config/networks.json";
 
 export const Main = () => {
   let { chainId } = useEthers();
