@@ -13,7 +13,7 @@ export const LendingManager = ({
     useCall(
       CLendingManagerAddress && {
         contract: CLendingManagerContract,
-        method: "getDepositKeys",
+        method: "getElementKeys",
         args: [],
       }
     ) ?? {};
@@ -22,7 +22,7 @@ export const LendingManager = ({
     useCall(
       CLendingManagerAddress && {
         contract: CLendingManagerContract,
-        method: "getAllDeposits",
+        method: "getAllElements",
         args: [],
       }
     ) ?? {};
@@ -83,9 +83,12 @@ export const LendingManager = ({
               </tr>
             </thead>
             <tbody>
-              {(keys !== undefined ? deposits[0] : []).map((deposit) => (
+              {(keys !== undefined
+                ? deposits[0].filter((e) => e.element_type == 1)
+                : []
+              ).map((deposit) => (
                 <tr key={deposit.key}>
-                  <td>{deposit.depositor}</td>
+                  <td>{deposit.participant}</td>
                   <td>{utils.formatEther(deposit.amount.toString())} ETH</td>
                   <td>
                     {new Date(
@@ -124,20 +127,62 @@ export const LendingManager = ({
           </Table>
         </Col>
       </Row>
-      <Row>
+      <Row className="p-2">
         <Col>
-          Balance:{" "}
-          {balance === undefined
-            ? "empty"
-            : utils.formatEther(balance.toString())}
-        </Col>
-        <Col>
-          <Button
-            variant="outline-primary"
-            onClick={onHandbackExpiredDepositsHandler}
-          >
-            Handback
-          </Button>
+          <Table borderless>
+            <thead>
+              <tr>
+                <th>Depositor</th>
+                <th>Amount</th>
+                <th>Created</th>
+                <th>Maturity</th>
+                <th>Expires</th>
+                <th>Expired</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(keys !== undefined
+                ? deposits[0].filter((e) => e.element_type == 2)
+                : []
+              ).map((deposit) => (
+                <tr key={deposit.key}>
+                  <td>{deposit.participant}</td>
+                  <td>{utils.formatEther(deposit.amount.toString())} ETH</td>
+                  <td>
+                    {new Date(
+                      deposit.timestamp.toString() * 1000
+                    ).toLocaleDateString("de-DE", {
+                      weekday: "short",
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </td>
+                  <td>{deposit.duration_in_days.toString()} days</td>
+                  <td>
+                    {addDays(
+                      new Date(deposit.timestamp.toString() * 1000),
+                      deposit.duration_in_days.toNumber()
+                    ).toLocaleDateString("de-DE", {
+                      weekday: "short",
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </td>
+                  <td>{deposit.expired.toString()}</td>
+                  <td>
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => onHandbackDepositHandler(deposit.key)}
+                    >
+                      Handback
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </Col>
       </Row>
       <Row className="p-2">
@@ -154,9 +199,12 @@ export const LendingManager = ({
               </tr>
             </thead>
             <tbody>
-              {(keys !== undefined ? deposits[0] : []).map((deposit) => (
+              {(keys !== undefined
+                ? deposits[0].filter((e) => e.element_type == 3)
+                : []
+              ).map((deposit) => (
                 <tr key={deposit.key}>
-                  <td>{deposit.depositor}</td>
+                  <td>{deposit.participant}</td>
                   <td>{utils.formatEther(deposit.amount.toString())} ETH</td>
                   <td>
                     {new Date(

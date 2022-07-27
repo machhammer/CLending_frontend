@@ -13,9 +13,9 @@ export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
 
   const { send: stakeSend } = useContractFunction(
     CLendingManagerContract,
-    "addDeposit",
+    "stake",
     {
-      transactionName: "Deposit Amount",
+      transactionName: "Stake Amount",
     }
   );
 
@@ -46,11 +46,13 @@ export const Deposit = ({ CLendingManagerContract, account, notify, eth }) => {
       notifications.filter(
         (notification) =>
           notification.type === "transactionSucceed" &&
-          notification.transactionName === "Deposit Amount"
+          notification.transactionName === "Stake Amount"
       ).length > 0
     ) {
-      setProcessing(false);
-      notify("Deposit succeeded!");
+      if (processing) {
+        setProcessing(false);
+        notify("Stake succeeded!");
+      }
     }
   }, [notifications]);
 
