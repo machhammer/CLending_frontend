@@ -20,6 +20,15 @@ export const LendingStage = ({
   const [eth, setETH] = useState(0);
   const [dai, setDAI] = useState(0);
 
+  const { value: owner } =
+    useCall(
+      CLendingManagerAddress && {
+        contract: CLendingManagerContract,
+        method: "getOwner",
+        args: [],
+      }
+    ) ?? {};
+
   const { value: keys } =
     useCall(
       CLendingManagerAddress && {
@@ -83,9 +92,12 @@ export const LendingStage = ({
                   keys={keys}
                   elements={elements}
                   balance={balance}
+                  owner={owner}
+                  account={account}
                 />
               }
             />
+            )
           </Routes>
         </Col>
       </Row>

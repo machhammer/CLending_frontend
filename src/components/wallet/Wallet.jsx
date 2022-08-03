@@ -27,7 +27,9 @@ export const Wallet = ({ network, account }) => {
               <img src={logo} width="30" />
             </td>
             <td>{etherBalance && etherBalanceFormat} </td>
-            <td>{network}</td>
+            <td>
+              {network} {account}
+            </td>
           </tr>
         </tbody>
       </Table>

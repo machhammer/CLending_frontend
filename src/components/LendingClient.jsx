@@ -50,15 +50,19 @@ export const LendingClient = ({
             eth={eth}
           />
         </Col>
-        <CollateralOverview
-          collaterals={
-            keys !== undefined
-              ? elements[0].filter(
-                  (e) => e.element_type == 2 && e.participant == account
-                )
-              : []
-          }
-        />
+      </Row>
+      <Row className="p-2">
+        <Col>
+          <CollateralOverview
+            collaterals={
+              keys !== undefined
+                ? elements[0].filter(
+                    (e) => e.element_type == 2 && e.participant == account
+                  )
+                : []
+            }
+          />
+        </Col>
       </Row>
       <Row className="p-2">
         <Col>
@@ -67,6 +71,19 @@ export const LendingClient = ({
             account={account}
             notify={notify}
             eth={eth}
+          />
+        </Col>
+      </Row>
+      <Row className="p-2">
+        <Col>
+          <BorrowingOverview
+            borrowings={
+              keys !== undefined
+                ? elements[0].filter(
+                    (e) => e.element_type == 3 && e.participant == account
+                  )
+                : []
+            }
           />
         </Col>
       </Row>
