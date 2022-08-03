@@ -5,7 +5,9 @@ import { StakesOverview } from "./manager/StakesOverview";
 import { CollateralOverview } from "./manager/CollateralOverview";
 import { BorrowingOverview } from "./manager/BorrowingOverview";
 
-export const LendingManager = ({ keys, elements, balance }) => {
+export const LendingManager = ({ keys, elements, balance, owner, account }) => {
+  if (owner != account) return <div>Not allowed</div>;
+
   return (
     <Container fluid>
       <Row className="p-2">
@@ -35,7 +37,7 @@ export const LendingManager = ({ keys, elements, balance }) => {
           <BorrowingOverview
             borrowings={
               keys !== undefined
-                ? elements[0].filter((e) => e.element_type == 2)
+                ? elements[0].filter((e) => e.element_type == 3)
                 : []
             }
           />
